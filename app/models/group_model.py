@@ -28,7 +28,7 @@ class Table(BaseModel):
 class GroupStudent(BaseModel):
     title=models.CharField(max_length=25,unique=True)
     course=models.ForeignKey(Course, on_delete=models.RESTRICT,related_name='course')
-    teacher=models.ManyToManyField(Teacher,related_name="get_teacher")
+    teacher=models.ManyToManyField(Teacher, related_name="get_teacher")
     created = models.DateField(auto_now_add=True)
     updated = models.DateField(auto_now=True)
     table=models.ForeignKey(Table,on_delete=models.CASCADE)

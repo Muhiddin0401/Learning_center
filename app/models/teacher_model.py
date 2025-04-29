@@ -17,8 +17,6 @@ class Departments(BaseModel):
     def __str__(self):
         return self.title
 
-
-
 # Xodimlarning datalarini saqlash uchun yuqoridagi Course va Departments modellari Worker bog'langan
 class Teacher(BaseModel):
     user=models.OneToOneField(User,on_delete=models.CASCADE,related_name='teacher_profile')

@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -30,6 +30,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+# learning_center/settings.py
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -37,9 +38,42 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app', # asosiy app
-    'rest_framework',
+    'rest_framework',  # DRF (Django REST Framework) uchun
+    'rest_framework_simplejwt',  # JWT autentifikatsiyasi uchun
+    'drf_yasg',  # Swagger dokumentatsiyasi uchun
+    'app',  # Sizning app nomingiz
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',  # JWT autentifikatsiyasi standart sifatida
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',  # Faqat autentifikatsiyadan o‘tgan foydalanuvchilar uchun ruxsat
+    ]
+}
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),  # Access token muddati (1 soat)
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),  # Refresh token muddati (1 kun)
+    'AUTH_HEADER_TYPES': ('Bearer',),  # Token turi (Bearer token)
+}
+
+AUTH_USER_MODEL = 'app.User'  # Maxsus User modelini aniqlash (app.User)
+
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+            'description': 'Enter JWT token like: Bearer <your_token>'
+        }
+    }
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -69,7 +103,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
