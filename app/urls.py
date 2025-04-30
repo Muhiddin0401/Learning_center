@@ -1,8 +1,6 @@
-# app/urls.py
-
 from django.urls import path, include  # URL yo‘naltirish uchun modullar
 from rest_framework.routers import DefaultRouter  # DRF routeri (ViewSetlarni avtomatik URLga ulash uchun)
-from .views import (UserViewSet, TeacherViewSet, StudentViewSet, DepartmentsViewSet, CourseViewSet,
+from app.views import (UserViewSet, TeacherViewSet, StudentViewSet, DepartmentsViewSet, CourseViewSet,
                     GroupStudentViewSet, DayViewSet, RoomsViewSet, TableTypeViewSet, TableViewSet,
                     ParentsViewSet, OTPViewSet)  # Barcha ViewSetlar import qilinadi
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView  # JWT token olish va yangilash uchun viewlar
@@ -15,14 +13,14 @@ router = DefaultRouter()
 router.register(r'users', UserViewSet)  # /users/ endpointi uchun UserViewSet
 router.register(r'teachers', TeacherViewSet)  # /teachers/ endpointi uchun TeacherViewSet
 router.register(r'students', StudentViewSet)  # /students/ endpointi uchun StudentViewSet
-router.register(r'departments', DepartmentsViewSet)  # /departments/ endpointi uchun DepartmentsViewSet
-router.register(r'courses', CourseViewSet)  # /courses/ endpointi uchun CourseViewSet
+# router.register(r'departments', DepartmentsViewSet)  # /departments/ endpointi uchun DepartmentsViewSet
+# router.register(r'courses', CourseViewSet)  # /courses/ endpointi uchun CourseViewSet
 router.register(r'groups', GroupStudentViewSet)  # /groups/ endpointi uchun GroupStudentViewSet
-router.register(r'days', DayViewSet)  # /days/ endpointi uchun DayViewSet
-router.register(r'rooms', RoomsViewSet)  # /rooms/ endpointi uchun RoomsViewSet
-router.register(r'table-types', TableTypeViewSet)  # /table-types/ endpointi uchun TableTypeViewSet
-router.register(r'tables', TableViewSet)  # /tables/ endpointi uchun TableViewSet
-router.register(r'parents', ParentsViewSet)  # /parents/ endpointi uchun ParentsViewSet
+# router.register(r'days', DayViewSet)  # /days/ endpointi uchun DayViewSet
+# router.register(r'rooms', RoomsViewSet)  # /rooms/ endpointi uchun RoomsViewSet
+# router.register(r'table-types', TableTypeViewSet)  # /table-types/ endpointi uchun TableTypeViewSet
+# router.register(r'tables', TableViewSet)  # /tables/ endpointi uchun TableViewSet
+# router.register(r'parents', ParentsViewSet)  # /parents/ endpointi uchun ParentsViewSet
 router.register(r'otp', OTPViewSet)  # /otp/ endpointi uchun OTPViewSet
 
 # Swagger sozlamalari (API dokumentatsiyasi uchun)
