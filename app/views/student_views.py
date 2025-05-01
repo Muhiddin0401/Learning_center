@@ -105,29 +105,24 @@ class StudentViewSet(ModelViewSet):  # Student uchun CRUD operatsiyasi sinfi
                 {"error": "Boshlang‘ich sana tugash sanasidan katta bo‘lmasligi kerak."},
                 status=400
             )
-
         # Datetime shaklga o‘tkazish
         start_datetime = datetime.combine(start_date, time.min)
         end_datetime = datetime.combine(end_date, time.max)
-
         # 1. Yangi qo‘shilgan talabalar (shu oraliqda ro‘yxatdan o‘tganlar)
         newly_added = Student.objects.filter(
             created_ed__gte=start_datetime,
             created_ed__lte=end_datetime
         )
-
         # 2. Bitirib ketgan talabalar (graduation_date shu oraliqda bo‘lganlar)
         graduated = Student.objects.filter(
             graduation_date__gte=start_date,
             graduation_date__lte=end_date
         )
-
         # 3. O‘sha vaqtda o‘qiyotgan talabalar:
         current_students = Student.objects.filter(
             Q(created_ed__lte=end_datetime) &
             (Q(graduation_date=None) | Q(graduation_date__gt=end_date))
         )
-
         # Serializatsiya
         newly_added_serializer = StudentStatisticsSerializer(newly_added, many=True)
         graduated_serializer = StudentStatisticsSerializer(graduated, many=True)
@@ -147,6 +142,31 @@ class StudentViewSet(ModelViewSet):  # Student uchun CRUD operatsiyasi sinfi
         attendance = student.attendance.all()  # Studentga tegishli davomatlar
         serializer = AttendanceSerializer(attendance, many=True)  # to'lovlarni Json formatga o'tkazish
         return Response(serializer.data)  # JSON formatda javob qaytarish
+
+
+    # Student to'lovini saqlash
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated, IsAdminOrStaff])
+    @swagger_auto_schema(
+        operation_description="Student to'lovlarini saqlash",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'student': openapi.Schema(type=openapi.TYPE_INTEGER, description='Student ID'),
+                'amount': openapi.Schema(type=openapi.TYPE_STRING, description='To`lov summasi'),
+                'data': openapi.Schema(type=openapi.TYPE_STRING, format='date', description='To`lov sanasi(YYYY-MM-DD)'),
+                'is_paid': openapi.Schema(type=openapi.TYPE_BOOLEAN, description='To`lov holati')
+            },
+            required = ['student', 'amount', 'data', 'is_paid']
+        ),
+        responses = {201: PaymentSerializer()}
+    )
+    def payments(self, request, pk=None): # To'lovni saqlash funskiyasi
+        serializer = PaymentSerializer(data=request.data) # datani serializatsiya qilish
+        if serializer.is_valid(): # ma'lumotlar to'g'ri bo'lsa
+            serializer.save() # to'lovni saqlash
+            return Response(serializer.data, status=201) # muofiqayatli natijani qaytarish
+        return Response(serializer.data, status=400) # xato natijani qaytarish
+
 
     # Student To'lovlarini ko'rish uchun
     @action(detail=True, methods=['get'], permission_classes=[IsAuthenticated, IsStudent])
