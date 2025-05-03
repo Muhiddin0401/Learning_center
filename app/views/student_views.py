@@ -169,7 +169,7 @@ class StudentViewSet(ModelViewSet):  # Student uchun CRUD operatsiyasi sinfi
 
 
     # Student To'lovlarini ko'rish uchun
-    @action(detail=True, methods=['get'], permission_classes=[IsAuthenticated, IsStudent])
+    @action(detail=True, methods=['get'], permission_classes=[IsAuthenticated, IsStudent, IsAdminOrStaff])
     @swagger_auto_schema(operation_description="Talaba To'lovlarini ko'rish")  # swaggerga qo'shish
     def payments(self, request, pk=None):  # talabaga to'lovlarini qaytarish uchun fuksiya
         student = self.get_object()  # Ayni student Ma'lumotini olish
