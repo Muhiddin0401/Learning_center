@@ -85,7 +85,7 @@ class StudentViewSet(ModelViewSet):  # Student uchun CRUD operatsiyasi sinfi
             )
         }
     )
-    @action(detail=False, methods=['post'], permission_classes=[IsAuthenticated, IsAdminOrStaff])
+    @action(detail=False, methods=['post'], permission_classes=[IsAdminOrStaff])
     def statisics(self, request):
         # Sanalarni olish
         start_date_str = request.data.get('start_date')
@@ -135,7 +135,7 @@ class StudentViewSet(ModelViewSet):  # Student uchun CRUD operatsiyasi sinfi
         }, status=200)
 
     # Student davomatini ko'rish uchun
-    @action(detail=True, methods=['get'], permission_classes=[IsAuthenticated, IsStudent, IsAdminOrStaff])
+    @action(detail=True, methods=['get'], permission_classes=[IsStudent])
     @swagger_auto_schema(operation_description="Talaba Davomatini ko'rish")  # swaggerga qo'shish
     def attendance(self, request, pk=None):  # talabaga davomatini qaytarish uchun fuksiya
         student = self.get_object()  # Ayni student Ma'lumotini olish
@@ -160,26 +160,29 @@ class StudentViewSet(ModelViewSet):  # Student uchun CRUD operatsiyasi sinfi
         ),
         responses = {201: PaymentSerializer()}
     )
-    def save_payments(self, request, pk=None): # To'lovni saqlash funskiyasi
-        serializer = PaymentSerializer(data=request.data) # datani serializatsiya qilish
-        if serializer.is_valid(): # ma'lumotlar to'g'ri bo'lsa
-            serializer.save() # to'lovni saqlash
-            return Response(serializer.data, status=201) # muofiqayatli natijani qaytarish
-        return Response(serializer.data, status=400) # xato natijani qaytarish
+    def save_payments(self, request, pk=None):
+        student = self.get_object()  # pk dan studentni olish
+        data = request.data.copy()  # Ma'lumotlarni nusxa olish
+        data['student'] = student.id  # Student ID'sini qo'shish
+        serializer = PaymentSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
 
 
     # Student To'lovlarini ko'rish uchun
-    @action(detail=True, methods=['get'], permission_classes=[IsAuthenticated, IsStudent, IsAdminOrStaff])
+    @action(detail=True, methods=['get'], permission_classes=[IsStudent])
     @swagger_auto_schema(operation_description="Talaba To'lovlarini ko'rish")  # swaggerga qo'shish
     def payments(self, request, pk=None):  # talabaga to'lovlarini qaytarish uchun fuksiya
         student = self.get_object()  # Ayni student Ma'lumotini olish
-        payments = student.payment.all()  # Studentga tegishli to'lovlarni
+        payments = student.payments.all()  # Studentga tegishli to'lovlarni
         serializer = PaymentSerializer(payments, many=True)  # to'lovlarni Json formatga o'tkazish
         return Response(serializer.data)  # JSON formatda javob qaytarish
 
     # Student Uyga vazifasini ko'rish uchun
     @swagger_auto_schema(operation_description="Talaba Uyga vazifasini ko'rish")  # swaggerga qo'shish
-    @action(detail=True, methods=['get'], permission_classes=[IsAuthenticated, IsStudent])
+    @action(detail=True, methods=['get'], permission_classes=[IsStudent])
     def assignment(self, request, pk=None):  # talabaga vazifalarini qaytarish uchun fuksiya
         student = self.get_object()  # Ayni student Ma'lumotini olish
         assignment = Assignment.objects.filter(group__in=student.group.all())  # Studentga tegishli vazifalarni

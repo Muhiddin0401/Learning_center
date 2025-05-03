@@ -29,7 +29,7 @@ class Attendance(BaseModel): # Davomat uchun modell
         return f"{self.student}-{self.date}" # String ko‘rinishi
 
 class Payment(BaseModel):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='payment')
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='payments')
     amount = models.DecimalField(max_digits=10, decimal_places=2) # to'lov summasi
     date = models.DateField() # to'lov sanasi
     is_paid = models.BooleanField(default=False) #to'lov holati
