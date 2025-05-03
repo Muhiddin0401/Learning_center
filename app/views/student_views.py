@@ -153,7 +153,7 @@ class StudentViewSet(ModelViewSet):  # Student uchun CRUD operatsiyasi sinfi
             properties={
                 'student': openapi.Schema(type=openapi.TYPE_INTEGER, description='Student ID'),
                 'amount': openapi.Schema(type=openapi.TYPE_STRING, description='To`lov summasi'),
-                'data': openapi.Schema(type=openapi.TYPE_STRING, format='date', description='To`lov sanasi(YYYY-MM-DD)'),
+                'date': openapi.Schema(type=openapi.TYPE_STRING, format='date', description='To`lov sanasi(YYYY-MM-DD)'),
                 'is_paid': openapi.Schema(type=openapi.TYPE_BOOLEAN, description='To`lov holati')
             },
             required = ['student', 'amount', 'data', 'is_paid']
