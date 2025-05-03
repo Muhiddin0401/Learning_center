@@ -160,7 +160,7 @@ class StudentViewSet(ModelViewSet):  # Student uchun CRUD operatsiyasi sinfi
         ),
         responses = {201: PaymentSerializer()}
     )
-    def payments(self, request, pk=None): # To'lovni saqlash funskiyasi
+    def save_payments(self, request, pk=None): # To'lovni saqlash funskiyasi
         serializer = PaymentSerializer(data=request.data) # datani serializatsiya qilish
         if serializer.is_valid(): # ma'lumotlar to'g'ri bo'lsa
             serializer.save() # to'lovni saqlash

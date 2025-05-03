@@ -47,7 +47,7 @@ schema_view.security = [{'Bearer': []}]  # Swaggerda Bearer token ishlatish
 # URL yo‘naltirishlari
 urlpatterns = [
     path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema_swagger_ui'),  # Swagger UI uchun endpoint
-    path('', include(router.urls)),  # Routerdagi barcha URLlarni qo‘shish
+    path('docs/', include(router.urls)),  # Routerdagi barcha URLlarni qo‘shish
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),  # JWT token olish uchun endpoint
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),  # JWT token yangilash uchun endpoint
 ]
