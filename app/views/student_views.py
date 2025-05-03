@@ -188,3 +188,10 @@ class StudentViewSet(ModelViewSet):  # Student uchun CRUD operatsiyasi sinfi
         assignment = Assignment.objects.filter(group__in=student.group.all())  # Studentga tegishli vazifalarni
         serializer = AssignmentSerializer(assignment, many=True)  # vazifalarni Json formatga o'tkazish
         return Response(serializer.data)  # JSON formatda javob qaytarish
+
+    # Salom funksiyasi
+    @swagger_auto_schema(operation_description="Salom berish")
+    @action(detail=True, methods=['get'], permission_classes=[IsStudent])
+    def hello(self, pk=None):
+        serializer = {"Hi": "Assalomu aleykum"}
+        return Response(serializer)

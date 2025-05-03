@@ -29,3 +29,4 @@ class UserViewSet(ModelViewSet):  # User uchun CRUD operatsiyasi sinfi
     @swagger_auto_schema(operation_description="Foydalanuvchini o'chirish")  # DELETE so'rovi
     def destroy(self, request, *args, **kwargs):  # Foydalanuvchini o'chirish (DELETE)
         return super().destroy(request, *args, **kwargs)  # ModelViewSet ning standart destroy metodini chaqirish
+
