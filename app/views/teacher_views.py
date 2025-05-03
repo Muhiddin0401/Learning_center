@@ -24,7 +24,7 @@ class TeacherViewSet(ModelViewSet):  # Teacher uchun CRUD operatsiyasi sinfi
         return super().destroy(request, *args, **kwargs)  # ModelViewSet ning standart destroy metodini chaqirish
 
     # Teacher faqat o'ziga tegishli guruhlarni ko'rish uchun maxsus action
-    @action(detail=True, methods=['get'], permission_classes=[IsAuthenticated, IsTeacher, IsAdminOrStaff])
+    @action(detail=True, methods=['get'], permission_classes=[IsAuthenticated, IsTeacher])
     @swagger_auto_schema(operation_description="O'qituvchi guruhlarini ko'rish")
     def groups(self, request, pk=None):  # Guruhlarni qaytarish
         teacher = self.get_object()  # Joriy teacher obyektini olish
@@ -32,7 +32,7 @@ class TeacherViewSet(ModelViewSet):  # Teacher uchun CRUD operatsiyasi sinfi
         serializer = GroupStudentSerializer(groups, many=True)  # Guruhlarni serializatsiya qilish
         return Response(serializer.data)  # JSON formatda qaytarish
 
-    @action(detail=True, methods=['get'], permission_classes=[IsAuthenticated, IsTeacher, IsAdminOrStaff])
+    @action(detail=True, methods=['get'], permission_classes=[IsAuthenticated, IsTeacher])
     # swagger izohi
     @swagger_auto_schema(operation_description="O'qituvchini bir guruhidagi studentlar ro'yxati")
     def students(self, request, pk=None):  # guruhdagi studentlar ro'yxatini olish
@@ -51,7 +51,7 @@ class TeacherViewSet(ModelViewSet):  # Teacher uchun CRUD operatsiyasi sinfi
         return Response(serializer.data)  # JSON formatida javob qaytarish
 
     # Yo'qlama uchun maxsus action:
-    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated, IsTeacher, IsAdminOrStaff])
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated, IsTeacher])
     @swagger_auto_schema(
         operation_description="Yo'qlama qilish",
         request_body=openapi.Schema(
