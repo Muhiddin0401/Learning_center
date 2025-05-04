@@ -193,5 +193,6 @@ class StudentViewSet(ModelViewSet):  # Student uchun CRUD operatsiyasi sinfi
     @swagger_auto_schema(operation_description="Salom berish")
     @action(detail=True, methods=['get'], permission_classes=[IsStudent])
     def hello(self, pk=None):
-        serializer = {"Hi": "Assalomu aleykum"}
-        return Response(serializer)
+        student = Student.objects.count()
+        serialzer = {"Student soni": student}
+        return Response(serialzer)
